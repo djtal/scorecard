@@ -27,6 +27,7 @@
 
   <!-- CSS : implied media="all" -->
   <link rel="stylesheet" href="css/style.css?v=2">
+  <link rel="stylesheet" href="css/grid.css">
 
   <!-- Uncomment if you are specifically targeting less enabled mobile browsers
   <link rel="stylesheet" media="handheld" href="css/handheld.css?v=2">  -->
@@ -36,9 +37,13 @@
 
 </head>
 
-<body>
+<body class="row">
 
-  <div id="container">
+  
+
+
+
+  <div id="container" >
     <header>
 
     </header>
@@ -52,6 +57,35 @@
     </footer>
   </div> <!--! end of #container -->
 
+  
+  <!-- template for app here  -->
+  <script type="text/html" name="appView">
+    <h1>{{name}}</h1>
+    <div>hey this is a simple for the moment.<br /> 
+      Just learn the whole thing
+    </div>
+  </script>
+  
+  <script type="text/html" name="playerNew">
+      a new player form here
+  </script>
+  
+  <script type="text/html" name="players">
+    <table>
+    <thead><tr><td>Player Name</td></tr></thead>
+    <tbody>
+    {{#players}}{{> player}}{{/players}}
+    </tbody>
+    </table>
+  </script>
+  
+  <script type="text/html" name="player">
+    <tr>
+      <td>aaaa {{name}}</td>
+    </tr>
+
+  </script>
+  
 
   <!-- Javascript at the bottom for fast page loading -->
 
@@ -66,6 +100,7 @@
   <script src="js/libs/json2.js"></script>
   <script src="js/libs/handlebars.js"></script>
   <script src="js/scorecard/models.js"></script>
+
   <script src="js/scorecard/views.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/script.js"></script>

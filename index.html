@@ -66,7 +66,13 @@
       <input type="submit" value="Ajouter" id="newPlayer" />
     </form>
     <table id="score">
-    <thead><tr><td class="grid_1">Player Name</td>{{#fields}}<td class="grid_1">{{name}}</td>{{/fields}}</tr></thead>
+    <thead>
+      <tr>
+        <td class="grid_1">Player Name</td>
+        {{#fields}}<td class="grid_1">{{name}}</td>{{/fields}}
+        <td class="grid_1"></td>
+      </tr>
+      </thead>
     <tbody>
     
     </tbody>
@@ -75,6 +81,7 @@
   
   <script type="text/html" name="player">
       <td class="grid_1">{{name}}</td>{{#fields}}<td class="grid_1">{{value}}</td>{{/fields}}
+      <td><a href="#" class="delete">X</a></td>
   </script>
   
 

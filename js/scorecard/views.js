@@ -10,6 +10,7 @@ var PlayerScoreLineView = Backbone.View.extend({
 		this.model.bind('change', this.render);
   },
   
+  
   render: function(){
     $(this.el).html(this.template(this.model.toJSON()));
     return this
@@ -22,11 +23,22 @@ var PlayersViews = Backbone.View.extend({
   
   el: "#score tbody",
   
+  
+  events: {
+    "click .delete": "deletePlayer", 
+  },
+  
   initialize: function() {
     _.bindAll(this, "render");
     this.model.bind('add', this.render)
     this.model.bind('remove', this.render)
   },
+  
+  
+  deletePlayer: function(ev){
+      alert(ev.relatedTarget)
+  },
+  
 
   render: function() {
     content = [];

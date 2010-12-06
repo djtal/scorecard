@@ -22,7 +22,6 @@ var PlayersViews = Backbone.View.extend({
   
   el: "#score tbody",
   
-  
   initialize: function() {
     _.bindAll(this, "render");
     this.model.bind('add', this.render)
@@ -72,6 +71,4 @@ var BoardGameScoreCard = Backbone.View.extend({
     return this
   }
   
-
-
 });

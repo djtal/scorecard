@@ -61,29 +61,20 @@
   <!-- template for app here  -->
   <script type="text/html" name="appView">
     <h1>{{name}}</h1>
-    <div>hey this is a simple for the moment.<br /> 
-      Just learn the whole thing
-    </div>
-  </script>
-  
-  <script type="text/html" name="playerNew">
-      a new player form here
-  </script>
-  
-  <script type="text/html" name="players">
-    <table>
-    <thead><tr><td>Player Name</td></tr></thead>
+    <form action="#">
+      <p><label for="playerName">Nom du joueur</label><input type="text" name="playerName" id="newPlayerName" /></p>
+      <input type="submit" value="Ajouter" id="newPlayer" />
+    </form>
+    <table id="score">
+    <thead><tr><td class="grid_1">Player Name</td>{{#fields}}<td class="grid_1">{{name}}</td>{{/fields}}</tr></thead>
     <tbody>
-    {{#players}}{{> player}}{{/players}}
+    
     </tbody>
     </table>
   </script>
   
   <script type="text/html" name="player">
-    <tr>
-      <td>aaaa {{name}}</td>
-    </tr>
-
+      <td class="grid_1">{{name}}</td>{{#fields}}<td class="grid_1">{{value}}</td>{{/fields}}
   </script>
   
 

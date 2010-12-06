@@ -1,41 +1,41 @@
 var PlayerScoreLineView = Backbone.View.extend({
 
-    template: Handlebars.compile($("script[name=player]").html()),
+	template: Handlebars.compile($("script[name=player]").html()),
 
-  
-  
+  tagName: "tr",
   className: "player",
-     
-    initialize: function() {
-        _.bindAll(this, "render");
-        this.model.bind('change', this.render);
+	 
+	initialize: function() {
+		_.bindAll(this, "render");
+		this.model.bind('change', this.render);
   },
-    
-})
-
-
-var PlayerNewView = Backbone.View.extend({
   
-  template: Handlebars.compile($("script[name=playerNew]").html()),
-
-  render: function() {
-    $(this.el).html(this.template());
+  render: function(){
+    $(this.el).html(this.template(this.model.toJSON()));
     return this
-  },
-  
+  }
+	
 })
+
 
 var PlayersViews = Backbone.View.extend({
   
-  template: Handlebars.compile($("script[name=players]").html()),
+  el: "#score tbody",
   
-  partials: {
-    "player": $("script[name=player]").html(),
+  
+  initialize: function() {
+    _.bindAll(this, "render");
+    this.model.bind('add', this.render)
+    this.model.bind('remove', this.render)
   },
 
   render: function() {
-    $(this.el).html(this.template(this.model.toJSON(), {"partials": this.partials}));
-    return this
+    content = [];
+    this.model.each(function(p){
+    pv = new PlayerScoreLineView({"model" : p})
+      content.push( pv.render().el);
+    }, this)
+    $(this.el).html(content)
   },
   
 })
@@ -43,30 +43,35 @@ var PlayersViews = Backbone.View.extend({
 
 var BoardGameScoreCard = Backbone.View.extend({
 
-  el: $("#main"),
+  el: "#main",
   
   className: "boardgame",
   
   template: Handlebars.compile($("script[name=appView]").html()),
 
   events: {
-    "click .icon":          "open",
-    "click .button.edit":   "openEditDialog",
-    "click .button.delete": "destroy"
+    "click #newPlayer":     "addPlayer",
   },
 
   initialize: function() {
     _.bindAll(this, "render");
     this.model.bind('change', this.render)
-    this.newPlayerView = new PlayerNewView()
-    this.playersView = new PlayersViews({model: this.model})
+  },
+  
+  addPlayer: function(event){
+    this.model.addPlayer($("#newPlayerName").val())
+    $("#newPlayerName").val("")
+    event.preventDefault()
+    event.stopPropagation()
   },
 
   render: function() {
     $(this.el).html(this.template(this.model.toJSON()));
-    $(this.el).append(this.newPlayerView.render().el)
-    $(this.el).append(this.playersView.render().el)
-
+    this.playersView = new PlayersViews({model: this.model.get("players")})
+    this.playersView.render()
     return this
   }
+  
+
+
 });

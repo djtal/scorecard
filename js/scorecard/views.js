@@ -23,8 +23,12 @@ var PlayerScoreLineView = Backbone.View.extend({
   },
   
   editScoreField: function(ev){
-    $(ev.currentTarget).toggleClass("hidden")
-    $(ev.currentTarget).next(".field-edit").toggleClass("hidden")
+    $(ev.currentTarget).addClass("hidden")
+    $(_.without(this.valueFields, ev.currentTarget)).removeClass("hidden")
+    input = _.first($(ev.currentTarget).next(".field-edit"))
+    $(input).removeClass("hidden")
+    $(_.without(this.editFields, input)).addClass("hidden")
+   
   },
   
   toggleFieldEdit: function(ev){
@@ -34,6 +38,8 @@ var PlayerScoreLineView = Backbone.View.extend({
   
   render: function(){
     $(this.el).html(this.template(this.model.toJSON()));
+    this.editFields = this.$(".field-edit")
+    this.valueFields = this.$(".field-value")
     return this
   }
 	

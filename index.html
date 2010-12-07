@@ -80,7 +80,13 @@
   </script>
   
   <script type="text/html" name="player">
-      <td class="grid_1">{{name}}</td>{{#fields}}<td class="grid_1">{{value}}</td>{{/fields}}
+      <td class="grid_1">{{name}}</td>
+      {{#fields}}
+        <td class="grid_1">
+          <span class="field-value">{{value}}</span>
+          <span class="field-edit hidden"><input type="text" name="{{../name}}-{{name}}-input" /></span>
+        </td>
+      {{/fields}}
       <td><a href="#" class="delete">X</a></td>
   </script>
   

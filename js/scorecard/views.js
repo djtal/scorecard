@@ -4,12 +4,33 @@ var PlayerScoreLineView = Backbone.View.extend({
 
   tagName: "tr",
   className: "player",
-	 
+  
+	events: {
+    "click .delete": "deletePlayer", 
+    "click .field-value":   "editScoreField",
+    "leave .field-edit":   "toggleFieldEdit",
+  }, 
+   
 	initialize: function() {
-		_.bindAll(this, "render");
-		this.model.bind('change', this.render);
+		_.bindAll(this, "render", "editScoreField", "deletePlayer", "toggleFieldEdit" )
+		this.model.bind('change', this.render)
   },
   
+  deletePlayer: function(ev){
+      this.remove();
+      ev.stopPropagation()
+      this.model.trigger("remove", this.model);
+  },
+  
+  editScoreField: function(ev){
+    $(ev.currentTarget).toggleClass("hidden")
+    $(ev.currentTarget).next(".field-edit").toggleClass("hidden")
+  },
+  
+  toggleFieldEdit: function(ev){
+    $(ev.currentTarget).prev(".field-value").toggleClass("hidden")
+    $(ev.currentTarget).toggleClass("hidden")
+  },
   
   render: function(){
     $(this.el).html(this.template(this.model.toJSON()));
@@ -24,19 +45,16 @@ var PlayersViews = Backbone.View.extend({
   el: "#score tbody",
   
   
-  events: {
-    "click .delete": "deletePlayer", 
-  },
-  
   initialize: function() {
-    _.bindAll(this, "render");
+    _.bindAll(this, "render", "deletePlayer");
     this.model.bind('add', this.render)
     this.model.bind('remove', this.render)
+    this.model.bind('remove', this.deletePlayer)
   },
   
   
-  deletePlayer: function(ev){
-      alert(ev.relatedTarget)
+  deletePlayer: function(player){
+      this.model.remove(player)
   },
   
 

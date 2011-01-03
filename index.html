@@ -70,7 +70,8 @@
       <tr>
         <td class="grid_1">Player Name</td>
         {{#fields}}<td class="grid_1">{{name}}</td>{{/fields}}
-        <td class="grid_1"></td>
+        <td class="grid_1">Total</td>
+        <td></td>
       </tr>
       </thead>
     <tbody>
@@ -81,14 +82,18 @@
   
   <script type="text/html" name="player">
       <td class="grid_1">{{name}}</td>
-      {{#fields}}
-        <td class="grid_1">
-          <span class="field-value">{{value}}</span>
-          <span class="field-edit hidden"><input type="text" name="{{../name}}-{{name}}-input" /></span>
-        </td>
-      {{/fields}}
+      <td id="player-{{name}}-score"></td>
       <td><a href="#" class="delete">X</a></td>
   </script>
+  
+  
+  <script type="text/html" name="score-bit">
+
+      <span class="field-total">{{total}}</span>
+      <span class="field-count hidden">{{count}}</span>
+      <span class="field-edit hidden"><input type="text" value={{count}}/></span>
+  </script>
+  
   
 
   <!-- Javascript at the bottom for fast page loading -->

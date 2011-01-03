@@ -1,3 +1,40 @@
+var ScoreBitView = Backbone.View.extend({
+  template:  Handlebars.compile($("script[name=score-bit]").html()),
+  tagName: "td",
+  className: "grid_1",
+  
+  events: {
+    "click .field-total":   "showEdit",
+    "blur .field-edit":   "hideEdit",
+    "change .field-edit input":   "updatePlayerScore",
+  },
+  
+  initialize: function() {
+		_.bindAll(this, "render", "showEdit", "hideEdit", "updatePlayerScore")
+		this.model.bind('change', this.render)
+  },
+  
+  showEdit: function(){
+    this.$(".field-total").addClass("hidden")
+    this.$(".field-edit").removeClass("hidden")
+  },
+  
+  hideEdit: function(){
+    this.$(".field-total").removeClass("hidden")
+    this.$(".field-edit").addClass("hidden")
+  },
+  
+  updatePlayerScore: function(){
+    this.model.set({"count": this.$(".field-edit input").val()})
+    this.model.process()
+  },
+  
+  render: function(){
+    $(this.el).html(this.template(this.model.toJSON()));
+    return this;
+  },
+})
+
 var PlayerScoreLineView = Backbone.View.extend({
 
 	template: Handlebars.compile($("script[name=player]").html()),
@@ -7,12 +44,10 @@ var PlayerScoreLineView = Backbone.View.extend({
   
 	events: {
     "click .delete": "deletePlayer", 
-    "click .field-value":   "editScoreField",
-    "leave .field-edit":   "toggleFieldEdit",
   }, 
    
 	initialize: function() {
-		_.bindAll(this, "render", "editScoreField", "deletePlayer", "toggleFieldEdit" )
+		_.bindAll(this, "render", "deletePlayer")
 		this.model.bind('change', this.render)
   },
   
@@ -22,24 +57,15 @@ var PlayerScoreLineView = Backbone.View.extend({
       this.model.trigger("remove", this.model);
   },
   
-  editScoreField: function(ev){
-    $(ev.currentTarget).addClass("hidden")
-    $(_.without(this.valueFields, ev.currentTarget)).removeClass("hidden")
-    input = _.first($(ev.currentTarget).next(".field-edit"))
-    $(input).removeClass("hidden")
-    $(_.without(this.editFields, input)).addClass("hidden")
-   
-  },
-  
-  toggleFieldEdit: function(ev){
-    $(ev.currentTarget).prev(".field-value").toggleClass("hidden")
-    $(ev.currentTarget).toggleClass("hidden")
-  },
   
   render: function(){
     $(this.el).html(this.template(this.model.toJSON()));
-    this.editFields = this.$(".field-edit")
-    this.valueFields = this.$(".field-value")
+    var content = []
+    this.model.get("score").each(function(score){
+      sv = new ScoreBitView({"model": score})
+      content.push(sv.render().el)
+    })
+    this.$("#player-" + this.model.get("name") + "-score").replaceWith(content)
     return this
   }
 	
@@ -49,7 +75,6 @@ var PlayerScoreLineView = Backbone.View.extend({
 var PlayersViews = Backbone.View.extend({
   
   el: "#score tbody",
-  
   
   initialize: function() {
     _.bindAll(this, "render", "deletePlayer");
@@ -63,9 +88,8 @@ var PlayersViews = Backbone.View.extend({
       this.model.remove(player)
   },
   
-
   render: function() {
-    content = [];
+    var content = [];
     this.model.each(function(p){
     pv = new PlayerScoreLineView({"model" : p})
       content.push( pv.render().el);
